@@ -23,7 +23,7 @@ Route::get('hasillaut', [HasilLautController::class, 'index'])->name('hasillaut.
 Route::get('/wa/hasillaut/{id}', [HasilLautController::class, 'redirectWa'])->name('wa.hasillaut');
 Route::get('tentangkami', [TentangKamiController::class, 'index']);
 
-Route::get('galeri', [GaleriController::class, 'index']);
+Route::get('galeri', [GaleriController::class, 'index'])->name('galeri.index');
 
 Route::get('kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('kontak', [KontakController::class, 'kirim'])->name('kontak.kirim');

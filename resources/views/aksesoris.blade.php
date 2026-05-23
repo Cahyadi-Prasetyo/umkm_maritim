@@ -1,63 +1,115 @@
+{{-- ============================================================
+     AKSESORIS PAGE — UMKM Maritim Kepulauan Riau
+     ============================================================ --}}
+
+@php $title = 'Aksesoris'; @endphp
+
 @include('partials.navbar')
-    <div class="container mx-auto px-4 font-[Open Sans]">
-        <div class="relative mt-5 ml-2 md:ml-4 lg:ml-30 ">
-            <!-- Page Heading -->
-            <div class="flex flex-col sm:flex-row items-center justify-between mb-4">
-            <p class="text-gray-800">Produk &gt; <span class="font-bold">Aksesoris</span></p>
-            </div>
-        </div>
-        
-        <div class="max-w-screen-xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mt-6">
+
+{{-- Page Hero Mini --}}
+<section class="page-hero-mini text-center" id="page-hero">
+    <div class="container-wide relative z-10">
+        <nav class="flex justify-center mb-4" aria-label="Breadcrumb">
+            <ol class="flex items-center gap-2 text-white/50 text-body-sm">
+                <li><a href="/homepage" class="hover:text-white transition-colors">Beranda</a></li>
+                <li><span class="text-white/25">/</span></li>
+                <li><span class="text-[#0d9488] font-medium">Aksesoris</span></li>
+            </ol>
+        </nav>
+        <span class="text-eyebrow text-[#0d9488] block mb-2">Produk Kami</span>
+        <h1 class="text-display-xl text-white">Aksesoris Khas Kepri</h1>
+        <p class="text-body-lg text-white/60 mt-3 max-w-lg mx-auto">
+            Kerajinan tangan dan aksesoris maritim khas Kepulauan Riau — karya asli para pengrajin lokal.
+        </p>
+    </div>
+</section>
+
+<main class="bg-[#f8fafc] py-12">
+    <div class="container-wide">
+
+        @if(count($aksesoriss) > 0)
+        <div class="product-grid">
             @foreach ($aksesoriss as $index => $aksesoris)
-            <div class="card-order relative max-w-[300px] w-full bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-                        
-                <!-- Custom Checkbox - Diperbaiki sesuai contoh Anda -->
-                <div class="absolute top-2 left-2 z-20 flex items-center">
-                    <input id="checkbox-{{ $index }}" type="checkbox" name="selected_aksesoriss[]" value="{{ $aksesoris['id'] }}"  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 focus:ring-2" onclick="handleCheckboxClick(this, {{ $index }})">
+            <div class="card-product card-order group" id="aksesoris-card-{{ $index }}">
+
+                <div class="relative overflow-hidden">
+                    <div class="absolute top-3 left-3 z-20">
+                        <input id="checkbox-{{ $index }}"
+                               type="checkbox"
+                               name="selected_aksesoriss[]"
+                               value="{{ $aksesoris['id'] }}"
+                               class="checkbox-custom"
+                               onclick="handleCheckboxClick(this, {{ $index }})">
+                    </div>
+                    <div class="absolute top-3 right-3 z-20">
+                        <span class="tag tag-amber text-[11px]">Aksesoris</span>
+                    </div>
+                    <img src="{{ asset($aksesoris['gambar']) }}"
+                         alt="{{ $aksesoris['judul'] }}"
+                         class="card-img"
+                         loading="lazy">
                 </div>
-        
-                <!-- Info Icon -->
-                <a href="javascript:void(0);" data-modal-target="modal-{{ $index }}" data-modal-toggle="modal-{{ $index }}"
-                    class="flex items-center justify-center bg-white rounded-full w-3 h-3 absolute top-2 right-2 text-black hover:text-orange-500 z-10">
-                    <i class="fa-solid fa-info-circle text-sm"></i>
-                </a>
-            
-                <!-- Gambar -->
-                <img src="{{ asset($aksesoris['gambar']) }}" alt="{{ $aksesoris['judul'] }}" class="w-full h-[120px] object-cover" />
-            
-                <!-- Info Produk -->
-                <div class="p-4 space-y-2">
-                    <h5 class="text-base tracking-tight text-black font-semibold">{{ $aksesoris['judul'] }}</h5>
-                    <p class="text-sm text-black font-bold">Rp.{{ number_format($aksesoris['harga'], 0, ',', '.') }}</p>
-                    <p class="text-sm text-black">
-                        <i class="fa-solid fa-location-dot mr-1"></i>{{ $aksesoris['lokasi'] }}
-                    </p>
-            
-                    <!-- Form Order -->
-                    <form action="{{ route('wa.aksesoris', ['id' => $aksesoris['id']]) }}" method="GET" class="flex items-center justify-between pt-3 border-t border-gray-200 mt-2">
-                        <div class="flex items-center space-x-2">
-                            <input type="number" name="jumlah" value="1" min="1" max="99"
-                                   class="order-input w-16 border rounded px-2 py-1 text-black"
+
+                <div class="p-5 space-y-3">
+                    <h3 class="text-heading-md text-[#0c1a24] line-clamp-2" data-product-name>
+                        {{ $aksesoris['judul'] }}
+                    </h3>
+
+                    <div class="flex items-center gap-1.5" data-product-location>
+                        <i class="fa-solid fa-location-dot text-[#0d9488] text-xs flex-shrink-0"></i>
+                        <span class="text-body-sm text-[#64748b] line-clamp-1">{{ $aksesoris['lokasi'] }}</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-[#f59e0b] font-bold text-lg"
+                              data-price="{{ $aksesoris['harga'] }}">
+                            Rp {{ number_format($aksesoris['harga'], 0, ',', '.') }}
+                        </span>
+                    </div>
+
+                    <form action="{{ route('wa.aksesoris', ['id' => $aksesoris['id']]) }}"
+                          method="GET"
+                          class="flex items-center justify-between gap-3 pt-3 border-t border-[#e2e8f0]">
+                        <div class="flex items-center gap-2">
+                            <label class="text-caption text-[#64748b]">Jml:</label>
+                            <input type="number"
+                                   name="jumlah"
+                                   value="1"
+                                   min="1"
+                                   max="99"
+                                   class="qty-input order-input"
                                    data-price="{{ $aksesoris['harga'] }}"
-                                   oninput="updateTotal(this)" />
-                            <span class="total-price text-black font-semibold">
-                                Rp.{{ number_format($aksesoris['harga'], 0, ',', '.') }}
+                                   oninput="updateTotal(this)">
+                            <span class="total-price text-body-sm text-[#0c1a24] font-semibold">
+                                Rp {{ number_format($aksesoris['harga'], 0, ',', '.') }}
                             </span>
                         </div>
-                        <button type="submit" class="text-black hover:text-green-600">
-                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <button type="submit" class="btn btn-wa btn-sm flex-shrink-0">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            Pesan
                         </button>
                     </form>
                 </div>
+
             </div>
             @endforeach
         </div>
-        <div id="wa-button-container" class="fixed bottom-6 right-6 hidden">
-            <a id="wa-button" href="_blank" class="bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center justify-center">
-                <i class="fab fa-whatsapp text-2xl mr-2"></i>
-                <span>Pesan via WA</span>
+        @else
+        <div class="text-center py-24">
+            <div class="text-6xl mb-4">💎</div>
+            <h3 class="text-heading-lg text-[#0c1a24] mb-2">Belum ada produk aksesoris</h3>
+            <p class="text-body-md text-[#64748b]">Produk akan segera hadir</p>
+        </div>
+        @endif
+
+        <div id="wa-button-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
+            <a id="wa-button" href="#" target="_blank" class="wa-float" rel="noopener">
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+                <span>Pesan Produk Terpilih via WA</span>
             </a>
         </div>
+
     </div>
-    
+</main>
+
 @include('partials.footer')
